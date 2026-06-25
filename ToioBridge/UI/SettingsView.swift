@@ -32,7 +32,6 @@ struct SettingsView: View {
             Text("ToioBridge")
                 .font(.largeTitle.bold())
             HStack(spacing: 16) {
-                Label("Bluetooth: \(manager.bluetoothStateDescription)", systemImage: "dot.radiowaves.left.and.right")
                 if manager.connectedCubes.isEmpty {
                     Label("No connected cube", systemImage: "cube.transparent")
                 } else {
@@ -41,6 +40,12 @@ struct SettingsView: View {
             }
             .font(.caption)
             .foregroundStyle(.secondary)
+
+            if let bluetoothIssueMessage {
+                Label(bluetoothIssueMessage, systemImage: "exclamationmark.triangle")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
 
             if let lastErrorMessage = manager.lastErrorMessage {
                 Text(lastErrorMessage)
@@ -137,6 +142,29 @@ struct SettingsView: View {
 
     private var targetCubeID: String? {
         selectedCubeID.isEmpty ? nil : selectedCubeID
+    }
+
+    private var bluetoothIssueMessage: String? {
+        if manager.authorizationDescription == "Denied" || manager.authorizationDescription == "Restricted" {
+            return "Bluetooth permission is not allowed."
+        }
+
+        switch manager.bluetoothStateDescription {
+        case "Powered On":
+            return nil
+        case "Powered Off":
+            return "Bluetooth is off."
+        case "Unauthorized":
+            return "Bluetooth permission is not allowed."
+        case "Unsupported":
+            return "Bluetooth is not supported on this Mac."
+        case "Resetting":
+            return "Bluetooth is resetting. Please wait."
+        case "Unknown":
+            return nil
+        default:
+            return "Bluetooth is unavailable."
+        }
     }
 
     private var selectedCubeStatus: some View {
