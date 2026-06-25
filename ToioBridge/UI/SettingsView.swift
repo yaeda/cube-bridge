@@ -10,6 +10,7 @@ struct SettingsView: View {
     @State private var green = 160.0
     @State private var blue = 255.0
     @State private var lampDuration = 1000
+    @State private var selectedCubeID = ""
     @State private var commandStatus = "Ready"
 
     var body: some View {
@@ -32,11 +33,10 @@ struct SettingsView: View {
                 .font(.largeTitle.bold())
             HStack(spacing: 16) {
                 Label("Bluetooth: \(manager.bluetoothStateDescription)", systemImage: "dot.radiowaves.left.and.right")
-                Label("Permission: \(manager.authorizationDescription)", systemImage: "lock")
-                if let cube = manager.connectedCubes.first {
-                    Label("Connected: \(cube.name) (\(cube.displayID))", systemImage: "cube")
-                } else {
+                if manager.connectedCubes.isEmpty {
                     Label("No connected cube", systemImage: "cube.transparent")
+                } else {
+                    Label("Connected: \(manager.connectedCubes.count)", systemImage: "cube")
                 }
             }
             .font(.caption)
@@ -53,6 +53,19 @@ struct SettingsView: View {
     private var controlPanel: some View {
         Grid(alignment: .leading, horizontalSpacing: 32, verticalSpacing: 18) {
             GridRow {
+                Picker("Target Cube", selection: $selectedCubeID) {
+                    Text("First connected cube").tag("")
+                    ForEach(manager.connectedCubes) { cube in
+                        Text("\(cube.name) (\(cube.displayID))").tag(cube.id)
+                    }
+                }
+                .disabled(manager.connectedCubes.isEmpty)
+                .frame(maxWidth: 320)
+
+                selectedCubeStatus
+            }
+
+            GridRow {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Motor")
                         .font(.headline)
@@ -64,6 +77,7 @@ struct SettingsView: View {
                         Button("Move") {
                             runCommand {
                                 try await manager.move(
+                                    cubeID: targetCubeID,
                                     left: Int(leftSpeed.rounded()),
                                     right: Int(rightSpeed.rounded()),
                                     durationMs: motorDuration
@@ -72,7 +86,7 @@ struct SettingsView: View {
                         }
                         Button("Stop") {
                             runCommand {
-                                try await manager.stop()
+                                try await manager.stop(cubeID: targetCubeID)
                             }
                         }
                     }
@@ -90,6 +104,7 @@ struct SettingsView: View {
                         Button("Set Lamp") {
                             runCommand {
                                 try await manager.setLamp(
+                                    cubeID: targetCubeID,
                                     red: Int(red.rounded()),
                                     green: Int(green.rounded()),
                                     blue: Int(blue.rounded()),
@@ -99,7 +114,7 @@ struct SettingsView: View {
                         }
                         Button("Turn Off") {
                             runCommand {
-                                try await manager.turnOffLamp()
+                                try await manager.turnOffLamp(cubeID: targetCubeID)
                             }
                         }
                     }
@@ -111,6 +126,33 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .gridCellColumns(2)
+            }
+        }
+        .onChange(of: manager.connectedCubes.map(\.id)) { connectedIDs in
+            if !selectedCubeID.isEmpty, !connectedIDs.contains(selectedCubeID) {
+                selectedCubeID = ""
+            }
+        }
+    }
+
+    private var targetCubeID: String? {
+        selectedCubeID.isEmpty ? nil : selectedCubeID
+    }
+
+    private var selectedCubeStatus: some View {
+        let selectedCube = manager.connectedCubes.first { cube in
+            cube.id == selectedCubeID
+        } ?? manager.connectedCubes.first
+
+        return Group {
+            if let selectedCube {
+                Text("Commands target: \(selectedCube.name) (\(selectedCube.displayID))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Commands require a connected cube.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }

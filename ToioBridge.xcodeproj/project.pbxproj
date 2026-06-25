@@ -56,6 +56,7 @@
 		FR0000010000000000000022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FR0000010000000000000023 /* ToioBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToioBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FR0000010000000000000024 /* ToioBridgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToioBridgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FR0000010000000000000025 /* ToioBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ToioBridge.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +92,7 @@
 				FR0000010000000000000001 /* ToioBridgeApp.swift */,
 				FR0000010000000000000002 /* AppDelegate.swift */,
 				FR0000010000000000000021 /* Info.plist */,
+				FR0000010000000000000025 /* ToioBridge.entitlements */,
 				GR0000010000000000000003 /* Models */,
 				GR0000010000000000000004 /* Bluetooth */,
 				GR0000010000000000000005 /* Intents */,
@@ -423,6 +425,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = ToioBridge/ToioBridge.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -448,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = ToioBridge/ToioBridge.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

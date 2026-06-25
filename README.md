@@ -28,7 +28,7 @@ The app appears in the menu bar and also opens a simple main window for scanning
 
 ## Using Apple Shortcuts
 
-After building and running ToioBridge once, open the Shortcuts app and search for `ToioBridge` or `toio`.
+After building and running ToioBridge once, open the Shortcuts app and search for `toio` or `ToioBridge`. On some macOS versions, the actions may appear in search before ToioBridge appears in the Apps list.
 
 The MVP registers these actions:
 

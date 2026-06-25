@@ -6,8 +6,13 @@ struct CubeListView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Cubes")
-                    .font(.headline)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Cubes")
+                        .font(.headline)
+                    Text("\(manager.connectedCubes.count) connected")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 Spacer()
                 Button(manager.isScanning ? "Stop Scan" : "Scan") {
                     manager.isScanning ? manager.stopScanning() : manager.startScanning()
@@ -24,6 +29,11 @@ struct CubeListView: View {
                     Text("Turn on a toio Core Cube and keep it nearby.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    if manager.isScanning {
+                        Text("Scanning...")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 180)
@@ -33,7 +43,7 @@ struct CubeListView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(cube.name)
                                 .font(.body)
-                            Text("ID: \(cube.displayID)  RSSI: \(cube.rssi)")
+                            Text("ID: \(cube.displayID)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             if let lastErrorMessage = cube.lastErrorMessage {

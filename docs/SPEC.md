@@ -10,10 +10,13 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 
 - The app runs as a normal macOS app with a menu bar extra and a simple main window.
 - The UI shows Bluetooth state, discovered toio Core Cube devices, connection controls, connected cube details, motor controls, and lamp controls.
+- The menu bar UI can send quick forward, stop, and lamp commands to each ready connected cube.
 - BLE scanning starts after `CBCentralManager` reaches `poweredOn`.
-- Cubes are discovered by the toio service UUID and by `toio-` local-name fallback.
+- Cubes are discovered by scanning with the toio service UUID filter. Names are not used for discovery because users can change them.
+- The app also checks macOS-retrieved peripherals connected with the toio service UUID, so cubes already connected at the system level can appear in the list.
 - The app discovers the toio service and motor, indicator, and sound characteristics.
 - The app can move, stop, set the lamp, and turn off the lamp for a connected cube.
+- The main window lets the user choose a target connected cube for motor and lamp commands; if no explicit target is selected, the first connected cube is used.
 - Shortcuts exposes native App Intents for move, stop, set lamp, and turn off lamp.
 - When a Shortcut omits the cube parameter, the first connected cube is used.
 - If Bluetooth is unavailable, permission is denied, no cube is connected, or a characteristic is unavailable, the app returns a user-readable error.

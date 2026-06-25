@@ -9,6 +9,11 @@ final class CubeManager: NSObject, ObservableObject {
     @Published private(set) var bluetoothStateDescription = "Unknown"
     @Published private(set) var authorizationDescription = "Unknown"
     @Published private(set) var isScanning = false
+    @Published private(set) var scanModeDescription = "Idle"
+    @Published private(set) var lastScanStartedAt: Date?
+    @Published private(set) var discoveryCallbackCount = 0
+    @Published private(set) var retrievedPeripheralCount = 0
+    @Published private(set) var lastDiscoveryDescription = "None"
     @Published private(set) var discoveredCubes: [ToioCube] = []
     @Published private(set) var connectedCubes: [ToioCube] = []
     @Published var lastErrorMessage: String?
@@ -20,7 +25,11 @@ final class CubeManager: NSObject, ObservableObject {
     private override init() {
         super.init()
         authorizationDescription = Self.describeAuthorization(CBCentralManager.authorization)
-        centralManager = CBCentralManager(delegate: self, queue: .main)
+        centralManager = CBCentralManager(
+            delegate: self,
+            queue: .main,
+            options: [CBCentralManagerOptionShowPowerAlertKey: true]
+        )
     }
 
     func startScanning() {
@@ -30,8 +39,15 @@ final class CubeManager: NSObject, ObservableObject {
         }
 
         isScanning = true
+        scanModeDescription = "toio service UUID"
+        lastScanStartedAt = Date()
+        discoveryCallbackCount = 0
+        retrievedPeripheralCount = 0
+        lastDiscoveryDescription = "None"
+        lastErrorMessage = nil
+        loadConnectedServicePeripherals()
         centralManager.scanForPeripherals(
-            withServices: nil,
+            withServices: [ToioBLEUUIDs.service],
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
     }
@@ -39,6 +55,7 @@ final class CubeManager: NSObject, ObservableObject {
     func stopScanning() {
         centralManager.stopScan()
         isScanning = false
+        scanModeDescription = "Idle"
     }
 
     func connect(_ cube: ToioCube) {
@@ -120,32 +137,42 @@ final class CubeManager: NSObject, ObservableObject {
     }
 
     private func handleDiscovered(peripheral: CBPeripheral, advertisementData: [String: Any], rssi: NSNumber) {
-        guard isToioAdvertisement(peripheral: peripheral, advertisementData: advertisementData) else {
-            return
-        }
-
         let advertisedName = advertisementData[CBAdvertisementDataLocalNameKey] as? String
         let name = advertisedName ?? peripheral.name ?? "toio Core Cube"
+        discoveryCallbackCount += 1
+        lastDiscoveryDescription = "\(name), RSSI \(rssi.intValue)"
 
+        addOrUpdateCube(peripheral: peripheral, name: name, rssi: rssi.intValue)
+    }
+
+    private func loadConnectedServicePeripherals() {
+        let peripherals = centralManager.retrieveConnectedPeripherals(withServices: [ToioBLEUUIDs.service])
+        retrievedPeripheralCount = peripherals.count
+
+        for peripheral in peripherals {
+            let name = peripheral.name ?? "toio Core Cube"
+            lastDiscoveryDescription = "Retrieved \(name)"
+            addOrUpdateCube(peripheral: peripheral, name: name, rssi: 0)
+
+            if peripheral.state == .connected, let cube = cubesByPeripheralID[peripheral.identifier] {
+                cube.connectionState = .connected
+                peripheral.delegate = self
+                peripheral.discoverServices([ToioBLEUUIDs.service])
+            }
+        }
+
+        refreshConnectedCubes()
+    }
+
+    private func addOrUpdateCube(peripheral: CBPeripheral, name: String, rssi: Int) {
         if let cube = cubesByPeripheralID[peripheral.identifier] {
-            cube.update(name: name, rssi: rssi.intValue)
+            cube.update(name: name, rssi: rssi)
             return
         }
 
-        let cube = ToioCube(peripheral: peripheral, name: name, rssi: rssi.intValue)
+        let cube = ToioCube(peripheral: peripheral, name: name, rssi: rssi)
         cubesByPeripheralID[peripheral.identifier] = cube
         discoveredCubes.append(cube)
-    }
-
-    private func isToioAdvertisement(peripheral: CBPeripheral, advertisementData: [String: Any]) -> Bool {
-        let advertisedServices = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
-        if advertisedServices.contains(ToioBLEUUIDs.service) {
-            return true
-        }
-
-        let localName = advertisementData[CBAdvertisementDataLocalNameKey] as? String
-        let name = localName ?? peripheral.name ?? ""
-        return name.hasPrefix("toio-") || name.hasPrefix("toio Core Cube-")
     }
 
     private func refreshConnectedCubes() {
