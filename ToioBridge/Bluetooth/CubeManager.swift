@@ -258,10 +258,10 @@ extension CubeManager: CBCentralManagerDelegate {
         _ central: CBCentralManager,
         didDiscover peripheral: CBPeripheral,
         advertisementData: [String: Any],
-        rssi RSSI: NSNumber
+        rssi: NSNumber
     ) {
         Task { @MainActor in
-            handleDiscovered(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI)
+            handleDiscovered(peripheral: peripheral, advertisementData: advertisementData, rssi: rssi)
         }
     }
 
