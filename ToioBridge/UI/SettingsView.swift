@@ -168,9 +168,10 @@ struct SettingsView: View {
     }
 
     private var selectedCubeStatus: some View {
-        let selectedCube = manager.connectedCubes.first { cube in
-            cube.id == selectedCubeID
-        } ?? manager.connectedCubes.first
+        let selectedCube =
+            manager.connectedCubes.first { cube in
+                cube.id == selectedCubeID
+            } ?? manager.connectedCubes.first
 
         return Group {
             if let selectedCube {
