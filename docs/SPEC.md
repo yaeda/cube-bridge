@@ -18,8 +18,19 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 - The app can move, stop, set the lamp, and turn off the lamp for a connected cube.
 - The main window lets the user choose a target connected cube for motor and lamp commands; if no explicit target is selected, the first connected cube is used.
 - Shortcuts exposes native App Intents for move, stop, set lamp, and turn off lamp.
+- For local development, Shortcuts execution expects ToioBridge to be signed with a valid local Apple Development identity; ad-hoc signing can prevent Shortcuts from communicating with the app.
 - When a Shortcut omits the cube parameter, the first connected cube is used.
 - If Bluetooth is unavailable, permission is denied, no cube is connected, or a characteristic is unavailable, the app returns a user-readable error.
+
+## Signing Configuration
+
+- The committed Xcode project must not contain a personal or organization Apple Developer Team ID.
+- Public defaults are provided by `Config/Signing.xcconfig`.
+- Developers may copy `Config/Signing.local.xcconfig.example` to `Config/Signing.local.xcconfig` for local signing; that local file is ignored by git.
+- Local signing uses manual signing by default so Xcode's "Automatically manage signing" checkbox remains off.
+- Manual provisioning profile selection is optional and should be configured only in the ignored local signing file when Xcode requires it.
+- Command line builds may override `CODE_SIGN_STYLE`, `DEVELOPMENT_TEAM`, and `CODE_SIGN_IDENTITY` without modifying the Xcode project.
+- Signing secrets and credentials, including `.p12`, provisioning profiles, and `AuthKey_*.p8`, must not be committed.
 
 ## BLE UUIDs
 
