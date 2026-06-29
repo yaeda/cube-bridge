@@ -6,9 +6,14 @@ struct ToioBridgeApp: App {
     @StateObject private var cubeManager = CubeManager.shared
 
     var body: some Scene {
-        MenuBarExtra("ToioBridge", systemImage: "dot.radiowaves.left.and.right") {
+        MenuBarExtra {
             MenuBarView()
                 .environmentObject(cubeManager)
+        } label: {
+            Label(
+                "ToioBridge",
+                systemImage: cubeManager.connectedCubes.isEmpty ? "cube" : "cube.fill"
+            )
         }
         .menuBarExtraStyle(.window)
 

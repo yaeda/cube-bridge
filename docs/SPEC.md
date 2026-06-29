@@ -9,6 +9,7 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 ## MVP Behavior
 
 - The app runs as a normal macOS app with a menu bar extra and a simple main window.
+- The menu bar extra shows the `cube` SF Symbol when no cube is connected and `cube.fill` when one or more cubes are connected.
 - The UI shows Bluetooth state, discovered toio Core Cube devices, connection controls, connected cube details, motor controls, and lamp controls.
 - The menu bar UI can send quick forward, stop, and lamp commands to each ready connected cube.
 - BLE scanning starts after `CBCentralManager` reaches `poweredOn`.
