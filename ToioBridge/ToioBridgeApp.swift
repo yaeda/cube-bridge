@@ -16,10 +16,5 @@ struct ToioBridgeApp: App {
             )
         }
         .menuBarExtraStyle(.window)
-
-        WindowGroup("ToioBridge") {
-            SettingsView()
-                .environmentObject(cubeManager)
-        }
     }
 }

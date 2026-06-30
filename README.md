@@ -17,7 +17,7 @@ ToioBridge is a macOS menu bar app that connects to toio Core Cube devices over 
 5. Build and run the app.
 6. Grant Bluetooth permission when macOS prompts for it.
 
-The app appears in the menu bar and also opens a simple main window for scanning, connecting, and sending test commands.
+The app appears in the menu bar for scanning, connecting, and sending commands.
 
 ### Local Signing
 
@@ -59,9 +59,10 @@ Never commit signing secrets such as `.p12` files, provisioning profiles, App St
 
 1. Turn on a toio Core Cube.
 2. Launch ToioBridge.
-3. Wait for the cube to appear in the discovered cube list.
+3. Wait for the cube to appear in the menu bar cube list.
 4. Click `Connect`.
-5. Use the motor and lamp controls in the app window or menu bar.
+5. Optionally enable `Launch at Login` in the menu bar so ToioBridge is ready for Shortcuts after login.
+6. Use the motor and lamp controls in the menu bar.
 
 ## Using Apple Shortcuts
 
