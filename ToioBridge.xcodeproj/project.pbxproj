@@ -17,8 +17,6 @@
 		BF0000010000000000000008 /* ToioCommandWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000008 /* ToioCommandWriter.swift */; };
 		BF0000010000000000000009 /* CubeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000009 /* CubeManager.swift */; };
 		BF0000010000000000000010 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000010 /* MenuBarView.swift */; };
-		BF0000010000000000000011 /* CubeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000011 /* CubeListView.swift */; };
-		BF0000010000000000000012 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000012 /* SettingsView.swift */; };
 		BF0000010000000000000013 /* CubeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000013 /* CubeEntity.swift */; };
 		BF0000010000000000000014 /* CubeEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000014 /* CubeEntityQuery.swift */; };
 		BF0000010000000000000015 /* MoveCubeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000015 /* MoveCubeIntent.swift */; };
@@ -30,6 +28,7 @@
 		BF0000010000000000000021 /* CubeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000005 /* CubeCommand.swift */; };
 		BF0000010000000000000022 /* ToioBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000004 /* ToioBridgeError.swift */; };
 		BF0000010000000000000023 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000028 /* Assets.xcassets */; };
+		BF0000010000000000000025 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000030 /* LoginItemManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,8 +42,6 @@
 		FR0000010000000000000008 /* ToioCommandWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToioCommandWriter.swift; sourceTree = "<group>"; };
 		FR0000010000000000000009 /* CubeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeManager.swift; sourceTree = "<group>"; };
 		FR0000010000000000000010 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
-		FR0000010000000000000011 /* CubeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeListView.swift; sourceTree = "<group>"; };
-		FR0000010000000000000012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FR0000010000000000000013 /* CubeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeEntity.swift; sourceTree = "<group>"; };
 		FR0000010000000000000014 /* CubeEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeEntityQuery.swift; sourceTree = "<group>"; };
 		FR0000010000000000000015 /* MoveCubeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCubeIntent.swift; sourceTree = "<group>"; };
@@ -61,6 +58,7 @@
 		FR0000010000000000000026 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		FR0000010000000000000027 /* Signing.local.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.local.xcconfig.example; sourceTree = "<group>"; };
 		FR0000010000000000000028 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FR0000010000000000000030 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,8 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				FR0000010000000000000010 /* MenuBarView.swift */,
-				FR0000010000000000000011 /* CubeListView.swift */,
-				FR0000010000000000000012 /* SettingsView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -156,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				FR0000010000000000000003 /* Logger.swift */,
+				FR0000010000000000000030 /* LoginItemManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -296,8 +293,6 @@
 				BF0000010000000000000008 /* ToioCommandWriter.swift in Sources */,
 				BF0000010000000000000009 /* CubeManager.swift in Sources */,
 				BF0000010000000000000010 /* MenuBarView.swift in Sources */,
-				BF0000010000000000000011 /* CubeListView.swift in Sources */,
-				BF0000010000000000000012 /* SettingsView.swift in Sources */,
 				BF0000010000000000000013 /* CubeEntity.swift in Sources */,
 				BF0000010000000000000014 /* CubeEntityQuery.swift in Sources */,
 				BF0000010000000000000015 /* MoveCubeIntent.swift in Sources */,
@@ -305,6 +300,7 @@
 				BF0000010000000000000017 /* SetLampIntent.swift in Sources */,
 				BF0000010000000000000018 /* TurnOffLampIntent.swift in Sources */,
 				BF0000010000000000000019 /* ToioBridgeShortcuts.swift in Sources */,
+				BF0000010000000000000025 /* LoginItemManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject private var manager: CubeManager
+    @StateObject private var loginItemManager = LoginItemManager()
     @State private var commandStatus = "Ready"
 
     var body: some View {
@@ -44,15 +45,9 @@ struct MenuBarView: View {
                     }
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
-                        ForEach(Array(manager.discoveredCubes.prefix(5))) { cube in
+                        ForEach(manager.discoveredCubes) { cube in
                             MenuBarCubeRow(cube: cube, runCommand: runCommand)
                                 .environmentObject(manager)
-                        }
-
-                        if manager.discoveredCubes.count > 5 {
-                            Text("+ \(manager.discoveredCubes.count - 5) more in the main window")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -66,6 +61,27 @@ struct MenuBarView: View {
 
             Divider()
 
+            Toggle(
+                "Launch at Login",
+                isOn: Binding(
+                    get: { loginItemManager.isLaunchAtLoginEnabled },
+                    set: { loginItemManager.setLaunchAtLoginEnabled($0) }
+                )
+            )
+            .toggleStyle(.switch)
+
+            if let loginItemStatusMessage = loginItemManager.statusMessage {
+                Text(loginItemStatusMessage)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let loginItemErrorMessage = loginItemManager.errorMessage {
+                Text(loginItemErrorMessage)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+
             Button(manager.isScanning ? "Stop Scanning" : "Start Scanning") {
                 manager.isScanning ? manager.stopScanning() : manager.startScanning()
             }
@@ -76,6 +92,9 @@ struct MenuBarView: View {
         }
         .padding()
         .frame(width: 320)
+        .onAppear {
+            loginItemManager.refresh()
+        }
     }
 
     private func runCommand(_ operation: @escaping () async throws -> Void) {
