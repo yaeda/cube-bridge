@@ -44,15 +44,16 @@ struct MenuBarView: View {
                         }
                     }
                 } else {
-                    ScrollView {
+                    ScrollView(.vertical) {
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(manager.discoveredCubes) { cube in
                                 MenuBarCubeRow(cube: cube, runCommand: runCommand)
                                     .environmentObject(manager)
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .frame(maxHeight: 280)
+                    .frame(height: cubeListHeight)
                 }
             }
 
@@ -133,6 +134,14 @@ struct MenuBarView: View {
         default:
             return "Bluetooth is unavailable."
         }
+    }
+
+    private var cubeListHeight: CGFloat {
+        let rowHeights = manager.discoveredCubes.map { cube in
+            cube.connectionState == .ready ? CGFloat(76) : CGFloat(48)
+        }
+        let spacing = CGFloat(max(manager.discoveredCubes.count - 1, 0) * 8)
+        return min(rowHeights.reduce(0, +) + spacing, 280)
     }
 }
 
