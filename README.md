@@ -63,7 +63,23 @@ Releases are managed by Release Please. Conventional Commit messages merged into
 updates `version.txt`, `CHANGELOG.md`, and the Xcode marketing/build versions,
 then creates a `v*` git tag and a draft GitHub Release. The release workflow
 builds a signed, notarized `ToioBridge-v*.dmg`, uploads it to that GitHub
-Release, and publishes the release after the asset is attached.
+Release, generates a Sparkle appcast at
+`https://yaeda.github.io/toio-bridge/appcast.xml`, and publishes the release
+after the appcast is deployed.
+
+The app uses Sparkle 2 for update checks. Release notes are served from the
+repository GitHub Wiki as raw Markdown and linked from the Sparkle appcast.
+Write release notes manually for users rather than copying `CHANGELOG.md`
+verbatim. Include the target version and older release sections so users who
+skip versions can still review intervening changes. Sparkle receives the full
+Markdown notes, and ToioBridge trims the displayed notes to versions newer than
+the user's installed bundle version:
+
+- `Release-Notes-en.md`
+- `Release-Notes-ja.md`
+
+Write the English Wiki page, translate and edit the Japanese Wiki page, and
+verify both raw Wiki URLs before merging the Release Please PR.
 
 Configure these repository secrets before merging the first release PR:
 
@@ -74,11 +90,17 @@ Configure these repository secrets before merging the first release PR:
 - `APP_STORE_CONNECT_API_KEY_ID`
 - `APP_STORE_CONNECT_API_ISSUER_ID`
 - `APP_STORE_CONNECT_API_KEY_P8_BASE64`
+- `SPARKLE_PUBLIC_ED_KEY`
+- `SPARKLE_PRIVATE_ED_KEY_BASE64`
 
 Optional: set `RELEASE_PLEASE_TOKEN` to a classic PAT or GitHub App token with
 repository contents and pull request permissions if Release Please-created PRs
 must trigger additional workflows. Without it, the workflow falls back to
 `GITHUB_TOKEN`.
+
+The Sparkle private EdDSA key should be base64-encoded before storing it in
+`SPARKLE_PRIVATE_ED_KEY_BASE64`; only the public key is embedded in release
+builds.
 
 ## Using The App
 
@@ -87,7 +109,8 @@ must trigger additional workflows. Without it, the workflow falls back to
 3. Wait for the cube to appear in the menu bar cube list.
 4. Click `Connect`.
 5. Optionally enable `Launch at Login` in the menu bar so ToioBridge is ready for Shortcuts after login.
-6. Use the motor and lamp controls in the menu bar.
+6. Use `Check for Updates...` to manually check the Sparkle appcast for updates.
+7. Use the motor and lamp controls in the menu bar.
 
 ## Using Apple Shortcuts
 
