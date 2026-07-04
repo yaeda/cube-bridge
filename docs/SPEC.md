@@ -13,6 +13,7 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 - The menu bar extra shows the `cube` SF Symbol when no cube is connected and `cube.fill` when one or more cubes are connected.
 - The UI shows Bluetooth state, discovered toio Core Cube devices, connection controls, connected cube details, motor controls, and lamp controls.
 - The menu bar UI can send quick forward, stop, and lamp commands to each ready connected cube.
+- The menu bar UI exposes a "Check for Updates..." command backed by Sparkle 2.
 - BLE scanning starts after `CBCentralManager` reaches `poweredOn`.
 - Cubes are discovered by scanning with the toio service UUID filter. Names are not used for discovery because users can change them.
 - The app also checks macOS-retrieved peripherals connected with the toio service UUID, so cubes already connected at the system level can appear in the list.
@@ -24,6 +25,18 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 - When a Shortcut omits the cube parameter, the first connected cube is used.
 - If Bluetooth is unavailable, permission is denied, no cube is connected, or a characteristic is unavailable, the app returns a user-readable error.
 
+## Update Distribution
+
+- The app checks for updates with Sparkle 2 using the appcast at `https://yaeda.github.io/toio-bridge/appcast.xml`.
+- Sparkle update archives are full signed and notarized `.dmg` files hosted as GitHub Release assets.
+- The Sparkle appcast is hosted on GitHub Pages and points each update enclosure at the matching GitHub Release `.dmg`.
+- Sparkle release notes are raw Markdown files hosted from the repository GitHub Wiki.
+- Each appcast item links English and Japanese release notes with `sparkle:releaseNotesLink` and `xml:lang`.
+- ToioBridge adapts full Markdown release notes through Sparkle's standard user driver delegate so the update UI only shows sections newer than the installed bundle version.
+- Release Please PRs include a checklist requiring maintainers to manually write the English Wiki release notes, translate and edit the Japanese Wiki release notes, and verify both raw Wiki URLs before merge.
+- Wiki release notes should be written for users rather than copied directly from `CHANGELOG.md`; each fixed-language page should contain the full release history so multi-version upgrades can be filtered locally.
+- The release workflow verifies the English and Japanese raw Wiki release-note URLs before deploying the appcast and publishing the GitHub Release.
+
 ## Signing Configuration
 
 - The committed Xcode project must not contain a personal or organization Apple Developer Team ID.
@@ -33,6 +46,7 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 - Manual provisioning profile selection is optional and should be configured only in the ignored local signing file when Xcode requires it.
 - Command line builds may override `CODE_SIGN_STYLE`, `DEVELOPMENT_TEAM`, and `CODE_SIGN_IDENTITY` without modifying the Xcode project.
 - Signing secrets and credentials, including `.p12`, provisioning profiles, and `AuthKey_*.p8`, must not be committed.
+- Sparkle EdDSA private keys must not be committed; the public key is injected into release builds through `SPARKLE_PUBLIC_ED_KEY`.
 
 ## BLE UUIDs
 
@@ -52,4 +66,5 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 
 - Unit tests cover command byte encoding and input validation.
 - Xcode build and test should pass with the `ToioBridge` scheme.
+- Release automation should validate that generated appcasts contain the GitHub Release `.dmg` URL, `sparkle:edSignature`, `length`, the expected Sparkle version, and English/Japanese release-note links.
 - Full BLE and Shortcuts behavior requires manual testing on macOS with a physical toio Core Cube.

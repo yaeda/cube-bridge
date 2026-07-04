@@ -35,6 +35,8 @@ jobs:
     runs-on: macos-26
     permissions:
       contents: write
+      id-token: write
+      pages: write
     env:
       APP_NAME: ToioBridge
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -44,6 +46,8 @@ jobs:
       CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64 }}
       CERTIFICATE_PASSWORD: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      SPARKLE_PRIVATE_ED_KEY_BASE64: ${{ secrets.SPARKLE_PRIVATE_ED_KEY_BASE64 }}
+      SPARKLE_PUBLIC_ED_KEY: ${{ secrets.SPARKLE_PUBLIC_ED_KEY }}
       VERSION: ${{ needs.release-please.outputs.version }}
       TAG_NAME: ${{ needs.release-please.outputs.tag_name }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,7 +70,9 @@ jobs:
             APP_STORE_CONNECT_API_KEY_P8_BASE64 \
             CERTIFICATE_BASE64 \
             CERTIFICATE_PASSWORD \
-            KEYCHAIN_PASSWORD; do
+            KEYCHAIN_PASSWORD \
+            SPARKLE_PRIVATE_ED_KEY_BASE64 \
+            SPARKLE_PUBLIC_ED_KEY; do
             if [ -z "${!name}" ]; then
               echo "::error::$name is required"
               missing=1
@@ -106,10 +112,12 @@ jobs:
             -scheme ToioBridge \
             -configuration Release \
             -destination 'generic/platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
             -archivePath "$archive_path" \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY='Developer ID Application' \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            SPARKLE_PUBLIC_ED_KEY="$SPARKLE_PUBLIC_ED_KEY"
 
       - name: Export Developer ID app
         run: |
@@ -168,6 +176,60 @@ jobs:
 
       - name: Upload release asset
         run: gh release upload "$TAG_NAME" "$RUNNER_TEMP/$APP_NAME-$TAG_NAME.dmg" --clobber
+
+      - name: Verify Wiki release notes
+        run: |
+          for lang in en ja; do
+            url="https://raw.githubusercontent.com/wiki/$GITHUB_REPOSITORY/Release-Notes-$lang.md"
+            curl --fail --silent --show-error --location "$url" > /dev/null
+          done
+
+      - name: Generate Sparkle appcast
+        run: |
+          generate_appcast_path="$(find "$RUNNER_TEMP/DerivedData/SourcePackages" -name generate_appcast -type f | head -n 1)"
+          sparkle_bin="$(dirname "$generate_appcast_path")"
+          if [ -z "$sparkle_bin" ] || [ ! -x "$sparkle_bin/generate_appcast" ]; then
+            echo "::error::Sparkle generate_appcast tool was not found"
+            exit 1
+          fi
+
+          private_key_path="$RUNNER_TEMP/sparkle_private_ed_key"
+          updates_path="$RUNNER_TEMP/sparkle-updates"
+          appcast_path="$updates_path/appcast.xml"
+          dmg_path="$RUNNER_TEMP/$APP_NAME-$TAG_NAME.dmg"
+
+          mkdir -p "$updates_path"
+          cp "$dmg_path" "$updates_path/"
+          echo -n "$SPARKLE_PRIVATE_ED_KEY_BASE64" | base64 --decode -o "$private_key_path"
+          "$sparkle_bin/generate_appcast" \
+            --ed-key-file "$private_key_path" \
+            --download-url-prefix "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG_NAME/" \
+            "$updates_path"
+          if [ ! -f "$appcast_path" ]; then
+            echo "::error::Sparkle did not generate $appcast_path"
+            exit 1
+          fi
+
+          python3 scripts/patch_sparkle_appcast.py \
+            --appcast "$appcast_path" \
+            --version "$VERSION" \
+            --repository "$GITHUB_REPOSITORY"
+
+          python3 -c "import sys, xml.etree.ElementTree as ET; ET.parse(sys.argv[1])" "$appcast_path"
+          mkdir -p "$RUNNER_TEMP/pages"
+          cp "$appcast_path" "$RUNNER_TEMP/pages/appcast.xml"
+          touch "$RUNNER_TEMP/pages/.nojekyll"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/pages
+
+      - name: Deploy Sparkle appcast to GitHub Pages
+        uses: actions/deploy-pages@v4
 
       - name: Publish GitHub Release
         run: gh release edit "$TAG_NAME" --draft=false

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject private var manager: CubeManager
+    @EnvironmentObject private var sparkleUpdater: SparkleUpdater
     @StateObject private var loginItemManager = LoginItemManager()
     @State private var commandStatus = "Ready"
 
@@ -89,6 +90,11 @@ struct MenuBarView: View {
             Button(manager.isScanning ? "Stop Scanning" : "Start Scanning") {
                 manager.isScanning ? manager.stopScanning() : manager.startScanning()
             }
+
+            Button("Check for Updates...") {
+                sparkleUpdater.checkForUpdates()
+            }
+            .disabled(!sparkleUpdater.canCheckForUpdates)
 
             Button("Quit ToioBridge") {
                 NSApp.terminate(nil)

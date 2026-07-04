@@ -10,6 +10,7 @@
       "package-name": "ToioBridge",
       "release-type": "simple",
       "initial-version": "1.0.0",
+      "pull-request-footer": "## Release checklist\n\n- [ ] Wiki release notes をユーザー向けに書く（英語）\n- [ ] Wiki release notes をユーザー向けに書く（日本語）\n- [ ] raw Wiki URL を確認する\n  - URL for en: https://raw.githubusercontent.com/wiki/yaeda/toio-bridge/Release-Notes-en.md\n  - URL for jp: https://raw.githubusercontent.com/wiki/yaeda/toio-bridge/Release-Notes-ja.md\n",
       "extra-files": [
         {
           "type": "generic",
