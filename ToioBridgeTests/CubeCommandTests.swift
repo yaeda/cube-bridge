@@ -41,6 +41,13 @@ final class CubeCommandTests: XCTestCase {
         XCTAssertEqual(Array(command.data), [0x01])
     }
 
+    func testSoundEffectCommandBytes() throws {
+        let command = try CubeCommand.playSoundEffect(id: 0, volume: 255)
+
+        XCTAssertEqual(command.target, .sound)
+        XCTAssertEqual(Array(command.data), [0x02, 0x00, 0xFF])
+    }
+
     func testInvalidSpeedThrows() {
         XCTAssertThrowsError(try CubeCommand.move(left: 101, right: 0, durationMs: 100)) { error in
             XCTAssertEqual(error as? ToioBridgeError, .invalidSpeed(101))
@@ -56,6 +63,12 @@ final class CubeCommandTests: XCTestCase {
     func testInvalidRGBThrows() {
         XCTAssertThrowsError(try CubeCommand.setLamp(red: 256, green: 0, blue: 0, durationMs: 100)) { error in
             XCTAssertEqual(error as? ToioBridgeError, .invalidRGB(red: 256, green: 0, blue: 0))
+        }
+    }
+
+    func testInvalidSoundEffectThrows() {
+        XCTAssertThrowsError(try CubeCommand.playSoundEffect(id: 11)) { error in
+            XCTAssertEqual(error as? ToioBridgeError, .invalidSoundEffect(11))
         }
     }
 }

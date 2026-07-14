@@ -37,7 +37,7 @@ final class ToioCube: ObservableObject, Identifiable {
         self.name = name
         self.rssi = rssi
         self.connectionState = .discovered
-        self.displayID = Self.extractDisplayID(from: name) ?? peripheral.identifier.uuidString
+        self.displayID = Self.extractDisplayID(from: name) ?? String(peripheral.identifier.uuidString.prefix(5))
     }
 
     func update(name: String, rssi: Int) {
