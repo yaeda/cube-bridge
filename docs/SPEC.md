@@ -21,6 +21,7 @@ The app bundle identifier is `io.github.yaeda.ToioBridge`.
 - Cube display IDs use the three-character suffix from standard toio names, or the first five characters of the peripheral UUID for custom names. Internal identification continues to use the full peripheral UUID.
 - The app discovers the toio service and motor, indicator, and sound characteristics.
 - The app can move, stop, set the lamp, and turn off the lamp for a connected cube.
+- BLE commands targeting the same cube are executed serially, while commands for different cubes may run concurrently.
 - The menu bar UI sends identify commands from each ready cube row.
 - Shortcuts exposes native App Intents for move, stop, set lamp, and turn off lamp.
 - For local development, Shortcuts execution expects ToioBridge to be signed with a valid local Apple Development identity; ad-hoc signing can prevent Shortcuts from communicating with the app.

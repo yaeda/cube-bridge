@@ -126,6 +126,10 @@ struct MenuBarView: View {
     }
 
     private func runCommand(cubeID: String, status: String, _ operation: @escaping () async throws -> Void) {
+        guard cubeCommandStatuses[cubeID] != status else {
+            return
+        }
+
         cubeCommandStatuses[cubeID] = status
         Task {
             do {
@@ -361,8 +365,8 @@ private struct MenuBarCubeRow: View {
                         CubeIconButton(
                             title: "Identify",
                             systemImage: "hand.point.right",
-                            isDisabled: cube.soundCharacteristic == nil,
-                            helpText: cube.soundCharacteristic == nil ? "Identify unavailable until sound is ready" : "Identify"
+                            isDisabled: isIdentifyDisabled,
+                            helpText: identifyHelpText
                         ) {
                             runIdentify {
                                 try await manager.identify(cubeID: cube.id)
@@ -389,5 +393,17 @@ private struct MenuBarCubeRow: View {
 
     private var statusText: String {
         commandStatus ?? cube.connectionState.rawValue
+    }
+
+    private var isIdentifyDisabled: Bool {
+        commandStatus == "Identifying..." || cube.soundCharacteristic == nil
+    }
+
+    private var identifyHelpText: String {
+        if commandStatus == "Identifying..." {
+            return "Identify in progress"
+        }
+
+        return cube.soundCharacteristic == nil ? "Identify unavailable until sound is ready" : "Identify"
     }
 }

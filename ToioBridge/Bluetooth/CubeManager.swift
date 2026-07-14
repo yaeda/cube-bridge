@@ -21,6 +21,8 @@ final class CubeManager: NSObject, ObservableObject {
     private var centralManager: CBCentralManager!
     private var cubesByPeripheralID: [UUID: ToioCube] = [:]
     private var pendingWrites: [String: CheckedContinuation<Void, Error>] = [:]
+    private var commandCubeIDs: Set<String> = []
+    private var commandWaitersByCubeID: [String: [CheckedContinuation<Void, Never>]] = [:]
 
     private override init() {
         super.init()
@@ -70,41 +72,53 @@ final class CubeManager: NSObject, ObservableObject {
     func move(cubeID: String? = nil, left: Int, right: Int, durationMs: Int) async throws {
         let cube = try connectedCube(for: cubeID)
         let command = try CubeCommand.move(left: left, right: right, durationMs: durationMs)
-        try await write(command, to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(command, to: cube)
+        }
     }
 
     func stop(cubeID: String? = nil) async throws {
         let cube = try connectedCube(for: cubeID)
-        try await write(.stop(), to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(.stop(), to: cube)
+        }
     }
 
     func setLamp(cubeID: String? = nil, red: Int, green: Int, blue: Int, durationMs: Int) async throws {
         let cube = try connectedCube(for: cubeID)
         let command = try CubeCommand.setLamp(red: red, green: green, blue: blue, durationMs: durationMs)
-        try await write(command, to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(command, to: cube)
+        }
     }
 
     func turnOffLamp(cubeID: String? = nil) async throws {
         let cube = try connectedCube(for: cubeID)
-        try await write(.turnOffLamp(), to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(.turnOffLamp(), to: cube)
+        }
     }
 
     func playSoundEffect(cubeID: String? = nil, id: Int, volume: Int = 255) async throws {
         let cube = try connectedCube(for: cubeID)
         let command = try CubeCommand.playSoundEffect(id: id, volume: volume)
-        try await write(command, to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(command, to: cube)
+        }
     }
 
     func identify(cubeID: String? = nil) async throws {
         let cube = try connectedCube(for: cubeID)
 
-        try await write(try CubeCommand.playSoundEffect(id: 0), to: cube)
-        try await write(try CubeCommand.setLamp(red: 0, green: 160, blue: 255, durationMs: 1000), to: cube)
-        try await write(try CubeCommand.move(left: 30, right: -30, durationMs: 180), to: cube)
-        try await Task.sleep(nanoseconds: 180_000_000)
-        try await write(try CubeCommand.move(left: -30, right: 30, durationMs: 180), to: cube)
-        try await Task.sleep(nanoseconds: 180_000_000)
-        try await write(.stop(), to: cube)
+        try await performExclusiveCommand(on: cube) {
+            try await write(try CubeCommand.playSoundEffect(id: 0), to: cube)
+            try await write(try CubeCommand.setLamp(red: 0, green: 160, blue: 255, durationMs: 1000), to: cube)
+            try await write(try CubeCommand.move(left: 30, right: -30, durationMs: 180), to: cube)
+            try await Task.sleep(nanoseconds: 180_000_000)
+            try await write(try CubeCommand.move(left: -30, right: 30, durationMs: 180), to: cube)
+            try await Task.sleep(nanoseconds: 180_000_000)
+            try await write(.stop(), to: cube)
+        }
     }
 
     func connectedCubeSnapshots() -> [CubeSnapshot] {
@@ -152,6 +166,34 @@ final class CubeManager: NSObject, ObservableObject {
         @unknown default:
             throw ToioBridgeError.writeFailed("Unsupported Core Bluetooth write type.")
         }
+    }
+
+    private func performExclusiveCommand<T>(on cube: ToioCube, operation: () async throws -> T) async throws -> T {
+        await acquireCommandAccess(for: cube.id)
+        defer { releaseCommandAccess(for: cube.id) }
+        try Task.checkCancellation()
+        return try await operation()
+    }
+
+    private func acquireCommandAccess(for cubeID: String) async {
+        if commandCubeIDs.insert(cubeID).inserted {
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            commandWaitersByCubeID[cubeID, default: []].append(continuation)
+        }
+    }
+
+    private func releaseCommandAccess(for cubeID: String) {
+        guard var waiters = commandWaitersByCubeID[cubeID], !waiters.isEmpty else {
+            commandCubeIDs.remove(cubeID)
+            return
+        }
+
+        let next = waiters.removeFirst()
+        commandWaitersByCubeID[cubeID] = waiters.isEmpty ? nil : waiters
+        next.resume()
     }
 
     private func handleDiscovered(peripheral: CBPeripheral, advertisementData: [String: Any], rssi: NSNumber) {
