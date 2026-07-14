@@ -45,7 +45,7 @@ final class LoginItemManager: ObservableObject {
         case .enabled, .notRegistered:
             return nil
         case .requiresApproval:
-            return "Approve ToioBridge in System Settings > General > Login Items."
+            return "Approve CubeBridge in System Settings > General > Login Items."
         case .notFound:
             return "Login item status is unavailable for this build."
         @unknown default:

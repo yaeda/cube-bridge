@@ -23,15 +23,15 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>ToioBridge uses Bluetooth to connect to and control toio Core Cube devices.</string>
+	<string>CubeBridge uses Bluetooth to connect to and control toio Core Cube devices.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>ToioBridge uses Bluetooth to connect to and control toio Core Cube devices.</string>
+	<string>CubeBridge uses Bluetooth to connect to and control toio Core Cube devices.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://yaeda.github.io/toio-bridge/appcast.xml</string>
+	<string>https://yaeda.github.io/cube-bridge/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>$(SPARKLE_PUBLIC_ED_KEY)</string>
 </dict>

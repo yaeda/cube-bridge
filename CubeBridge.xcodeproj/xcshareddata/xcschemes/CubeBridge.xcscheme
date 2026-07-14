@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TG0000010000000000000001"
-               BuildableName = "ToioBridge.app"
-               BlueprintName = "ToioBridge"
-               ReferencedContainer = "container:ToioBridge.xcodeproj">
+               BuildableName = "CubeBridge.app"
+               BlueprintName = "CubeBridge"
+               ReferencedContainer = "container:CubeBridge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -30,9 +30,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TG0000010000000000000002"
-               BuildableName = "ToioBridgeTests.xctest"
-               BlueprintName = "ToioBridgeTests"
-               ReferencedContainer = "container:ToioBridge.xcodeproj">
+               BuildableName = "CubeBridgeTests.xctest"
+               BlueprintName = "CubeBridgeTests"
+               ReferencedContainer = "container:CubeBridge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,9 +48,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TG0000010000000000000002"
-               BuildableName = "ToioBridgeTests.xctest"
-               BlueprintName = "ToioBridgeTests"
-               ReferencedContainer = "container:ToioBridge.xcodeproj">
+               BuildableName = "CubeBridgeTests.xctest"
+               BlueprintName = "CubeBridgeTests"
+               ReferencedContainer = "container:CubeBridge.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "TG0000010000000000000001"
-            BuildableName = "ToioBridge.app"
-            BlueprintName = "ToioBridge"
-            ReferencedContainer = "container:ToioBridge.xcodeproj">
+            BuildableName = "CubeBridge.app"
+            BlueprintName = "CubeBridge"
+            ReferencedContainer = "container:CubeBridge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -87,9 +87,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "TG0000010000000000000001"
-            BuildableName = "ToioBridge.app"
-            BlueprintName = "ToioBridge"
-            ReferencedContainer = "container:ToioBridge.xcodeproj">
+            BuildableName = "CubeBridge.app"
+            BlueprintName = "CubeBridge"
+            ReferencedContainer = "container:CubeBridge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

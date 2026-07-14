@@ -1,6 +1,6 @@
 included:
-  - ToioBridge
-  - ToioBridgeTests
+  - CubeBridge
+  - CubeBridgeTests
 
 cache_path: .build/swiftlint
 

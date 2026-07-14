@@ -10,7 +10,7 @@ struct MenuBarView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text("ToioBridge")
+                Text("CubeBridge")
                     .font(.headline)
                 Spacer()
                 Text(appVersion)
@@ -106,7 +106,7 @@ struct MenuBarView: View {
                 sparkleUpdater.checkForUpdates()
             }
 
-            MenuCommandRow(title: "Quit ToioBridge") {
+            MenuCommandRow(title: "Quit CubeBridge") {
                 NSApp.terminate(nil)
             }
         }

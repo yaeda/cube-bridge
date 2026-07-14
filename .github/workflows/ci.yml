@@ -23,11 +23,11 @@ jobs:
 
       - name: Check Swift formatting
         run: |
-          xcrun swift-format format --in-place --recursive --parallel --configuration .swift-format ToioBridge ToioBridgeTests
-          git diff --exit-code -- ToioBridge ToioBridgeTests
+          xcrun swift-format format --in-place --recursive --parallel --configuration .swift-format CubeBridge CubeBridgeTests
+          git diff --exit-code -- CubeBridge CubeBridgeTests
 
       - name: Run SwiftLint
         run: swiftlint lint --strict --config .swiftlint.yml
 
       - name: Run tests
-        run: xcodebuild test -project ToioBridge.xcodeproj -scheme ToioBridge -destination 'platform=macOS' -derivedDataPath .build/DerivedData CODE_SIGNING_ALLOWED=NO
+        run: xcodebuild test -project CubeBridge.xcodeproj -scheme CubeBridge -destination 'platform=macOS' -derivedDataPath .build/DerivedData CODE_SIGNING_ALLOWED=NO

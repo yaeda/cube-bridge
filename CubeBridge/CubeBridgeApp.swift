@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct ToioBridgeApp: App {
+struct CubeBridgeApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var cubeManager = CubeManager.shared
     @StateObject private var sparkleUpdater = SparkleUpdater()
@@ -13,7 +13,7 @@ struct ToioBridgeApp: App {
                 .environmentObject(sparkleUpdater)
         } label: {
             Label(
-                "ToioBridge",
+                "CubeBridge",
                 systemImage: cubeManager.connectedCubes.isEmpty ? "cube" : "cube.fill"
             )
         }

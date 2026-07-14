@@ -1,6 +1,6 @@
 import Foundation
 
-enum ToioBridgeError: LocalizedError, Equatable {
+enum CubeBridgeError: LocalizedError, Equatable {
     case bluetoothPoweredOff
     case bluetoothPermissionDenied
     case bluetoothUnavailable(String)
@@ -18,11 +18,11 @@ enum ToioBridgeError: LocalizedError, Equatable {
         case .bluetoothPoweredOff:
             return "Bluetooth is off. Turn on Bluetooth and try again."
         case .bluetoothPermissionDenied:
-            return "Bluetooth permission is not available for ToioBridge. Allow Bluetooth access in System Settings."
+            return "Bluetooth permission is not available for CubeBridge. Allow Bluetooth access in System Settings."
         case .bluetoothUnavailable(let state):
             return "Bluetooth is not ready: \(state)."
         case .cubeNotConnected:
-            return "No toio Core Cube is connected. Connect a cube in ToioBridge and try again."
+            return "No toio Core Cube is connected. Connect a cube in CubeBridge and try again."
         case .cubeNotFound(let id):
             return "The selected toio Core Cube is not connected: \(id)."
         case .characteristicNotFound(let name):
