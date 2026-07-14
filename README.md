@@ -110,7 +110,7 @@ builds.
 4. Click `Connect`.
 5. Optionally enable `Launch at Login` in the menu bar so ToioBridge is ready for Shortcuts after login.
 6. Use `Check for Updates...` to manually check the Sparkle appcast for updates.
-7. Use the motor and lamp controls in the menu bar.
+7. Use `Identify` in the menu bar to confirm which connected cube is which.
 
 ## Using Apple Shortcuts
 

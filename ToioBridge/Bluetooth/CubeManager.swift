@@ -89,6 +89,24 @@ final class CubeManager: NSObject, ObservableObject {
         try await write(.turnOffLamp(), to: cube)
     }
 
+    func playSoundEffect(cubeID: String? = nil, id: Int, volume: Int = 255) async throws {
+        let cube = try connectedCube(for: cubeID)
+        let command = try CubeCommand.playSoundEffect(id: id, volume: volume)
+        try await write(command, to: cube)
+    }
+
+    func identify(cubeID: String? = nil) async throws {
+        let cube = try connectedCube(for: cubeID)
+
+        try await write(try CubeCommand.playSoundEffect(id: 0), to: cube)
+        try await write(try CubeCommand.setLamp(red: 0, green: 160, blue: 255, durationMs: 1000), to: cube)
+        try await write(try CubeCommand.move(left: 30, right: -30, durationMs: 180), to: cube)
+        try await Task.sleep(nanoseconds: 180_000_000)
+        try await write(try CubeCommand.move(left: -30, right: 30, durationMs: 180), to: cube)
+        try await Task.sleep(nanoseconds: 180_000_000)
+        try await write(.stop(), to: cube)
+    }
+
     func connectedCubeSnapshots() -> [CubeSnapshot] {
         connectedCubes.map {
             CubeSnapshot(id: $0.id, name: $0.name, displayID: $0.displayID)
