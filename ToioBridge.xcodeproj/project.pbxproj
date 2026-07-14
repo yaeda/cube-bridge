@@ -31,6 +31,9 @@
 		BF0000010000000000000025 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000030 /* LoginItemManager.swift */; };
 		BF0000010000000000000026 /* SparkleUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000031 /* SparkleUpdater.swift */; };
 		BF0000010000000000000027 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = PD0000010000000000000001 /* Sparkle */; };
+		BF0000010000000000000028 /* CubeCommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000032 /* CubeCommandQueue.swift */; };
+		BF0000010000000000000029 /* CubeCommandQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000032 /* CubeCommandQueue.swift */; };
+		BF0000010000000000000030 /* CubeCommandQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000010000000000000033 /* CubeCommandQueueTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +65,8 @@
 		FR0000010000000000000028 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FR0000010000000000000030 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 		FR0000010000000000000031 /* SparkleUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdater.swift; sourceTree = "<group>"; };
+		FR0000010000000000000032 /* CubeCommandQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeCommandQueue.swift; sourceTree = "<group>"; };
+		FR0000010000000000000033 /* CubeCommandQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeCommandQueueTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				FR0000010000000000000009 /* CubeManager.swift */,
+				FR0000010000000000000032 /* CubeCommandQueue.swift */,
 				FR0000010000000000000007 /* ToioBLEUUIDs.swift */,
 				FR0000010000000000000008 /* ToioCommandWriter.swift */,
 			);
@@ -166,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				FR0000010000000000000020 /* CubeCommandTests.swift */,
+				FR0000010000000000000033 /* CubeCommandQueueTests.swift */,
 				FR0000010000000000000022 /* Info.plist */,
 			);
 			path = ToioBridgeTests;
@@ -303,6 +310,7 @@
 				BF0000010000000000000007 /* ToioBLEUUIDs.swift in Sources */,
 				BF0000010000000000000008 /* ToioCommandWriter.swift in Sources */,
 				BF0000010000000000000009 /* CubeManager.swift in Sources */,
+				BF0000010000000000000028 /* CubeCommandQueue.swift in Sources */,
 				BF0000010000000000000010 /* MenuBarView.swift in Sources */,
 				BF0000010000000000000013 /* CubeEntity.swift in Sources */,
 				BF0000010000000000000014 /* CubeEntityQuery.swift in Sources */,
@@ -321,6 +329,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF0000010000000000000020 /* CubeCommandTests.swift in Sources */,
+				BF0000010000000000000030 /* CubeCommandQueueTests.swift in Sources */,
+				BF0000010000000000000029 /* CubeCommandQueue.swift in Sources */,
 				BF0000010000000000000021 /* CubeCommand.swift in Sources */,
 				BF0000010000000000000022 /* ToioBridgeError.swift in Sources */,
 			);

@@ -21,8 +21,7 @@ final class CubeManager: NSObject, ObservableObject {
     private var centralManager: CBCentralManager!
     private var cubesByPeripheralID: [UUID: ToioCube] = [:]
     private var pendingWrites: [String: CheckedContinuation<Void, Error>] = [:]
-    private var commandCubeIDs: Set<String> = []
-    private var commandWaitersByCubeID: [String: [CheckedContinuation<Void, Never>]] = [:]
+    private let commandQueue = CubeCommandQueue()
 
     private override init() {
         super.init()
@@ -169,31 +168,7 @@ final class CubeManager: NSObject, ObservableObject {
     }
 
     private func performExclusiveCommand<T>(on cube: ToioCube, operation: () async throws -> T) async throws -> T {
-        await acquireCommandAccess(for: cube.id)
-        defer { releaseCommandAccess(for: cube.id) }
-        try Task.checkCancellation()
-        return try await operation()
-    }
-
-    private func acquireCommandAccess(for cubeID: String) async {
-        if commandCubeIDs.insert(cubeID).inserted {
-            return
-        }
-
-        await withCheckedContinuation { continuation in
-            commandWaitersByCubeID[cubeID, default: []].append(continuation)
-        }
-    }
-
-    private func releaseCommandAccess(for cubeID: String) {
-        guard var waiters = commandWaitersByCubeID[cubeID], !waiters.isEmpty else {
-            commandCubeIDs.remove(cubeID)
-            return
-        }
-
-        let next = waiters.removeFirst()
-        commandWaitersByCubeID[cubeID] = waiters.isEmpty ? nil : waiters
-        next.resume()
+        try await commandQueue.perform(cubeID: cube.id, operation: operation)
     }
 
     private func handleDiscovered(peripheral: CBPeripheral, advertisementData: [String: Any], rssi: NSNumber) {
