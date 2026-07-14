@@ -35,7 +35,7 @@ final class CubeManager: NSObject, ObservableObject {
 
     func startScanning() {
         guard centralManager.state == .poweredOn else {
-            lastErrorMessage = ToioBridgeError.bluetoothUnavailable(bluetoothStateDescription).localizedDescription
+            lastErrorMessage = CubeBridgeError.bluetoothUnavailable(bluetoothStateDescription).localizedDescription
             return
         }
 
@@ -133,13 +133,13 @@ final class CubeManager: NSObject, ObservableObject {
 
         if let cubeID, !cubeID.isEmpty {
             guard let cube = connectedCubes.first(where: { $0.id == cubeID }) else {
-                throw ToioBridgeError.cubeNotFound(cubeID)
+                throw CubeBridgeError.cubeNotFound(cubeID)
             }
             return cube
         }
 
         guard let cube = connectedCubes.first else {
-            throw ToioBridgeError.cubeNotConnected
+            throw CubeBridgeError.cubeNotConnected
         }
 
         return cube
@@ -147,7 +147,7 @@ final class CubeManager: NSObject, ObservableObject {
 
     private func write(_ command: CubeCommand, to cube: ToioCube) async throws {
         guard cube.isReady || cube.connectionState == .connected else {
-            throw ToioBridgeError.cubeNotConnected
+            throw CubeBridgeError.cubeNotConnected
         }
 
         let characteristic = try ToioCommandWriter.characteristic(for: command, cube: cube)
@@ -163,7 +163,7 @@ final class CubeManager: NSObject, ObservableObject {
         case .withoutResponse:
             cube.peripheral.writeValue(command.data, for: characteristic, type: .withoutResponse)
         @unknown default:
-            throw ToioBridgeError.writeFailed("Unsupported Core Bluetooth write type.")
+            throw CubeBridgeError.writeFailed("Unsupported Core Bluetooth write type.")
         }
     }
 
@@ -220,7 +220,7 @@ final class CubeManager: NSObject, ObservableObject {
         "\(peripheral.identifier.uuidString)-\(characteristic.uuid.uuidString)"
     }
 
-    private func bluetoothError(for state: CBManagerState) -> ToioBridgeError {
+    private func bluetoothError(for state: CBManagerState) -> CubeBridgeError {
         authorizationDescription = Self.describeAuthorization(CBCentralManager.authorization)
 
         switch CBCentralManager.authorization {
@@ -355,7 +355,7 @@ extension CubeManager: CBPeripheralDelegate {
             }
 
             guard let service = peripheral.services?.first(where: { $0.uuid == ToioBLEUUIDs.service }) else {
-                cube.lastErrorMessage = ToioBridgeError.characteristicNotFound("toio service").localizedDescription
+                cube.lastErrorMessage = CubeBridgeError.characteristicNotFound("toio service").localizedDescription
                 return
             }
 
@@ -403,7 +403,7 @@ extension CubeManager: CBPeripheralDelegate {
             }
 
             if let error {
-                continuation.resume(throwing: ToioBridgeError.writeFailed(error.localizedDescription))
+                continuation.resume(throwing: CubeBridgeError.writeFailed(error.localizedDescription))
             } else {
                 continuation.resume()
             }

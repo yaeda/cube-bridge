@@ -1,6 +1,6 @@
 import AppIntents
 
-struct ToioBridgeShortcuts: AppShortcutsProvider {
+struct CubeBridgeShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: MoveCubeIntent(),

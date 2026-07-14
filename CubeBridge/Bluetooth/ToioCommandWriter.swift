@@ -6,17 +6,17 @@ struct ToioCommandWriter {
         switch command.target {
         case .motor:
             guard let characteristic = cube.motorCharacteristic else {
-                throw ToioBridgeError.characteristicNotFound("motor")
+                throw CubeBridgeError.characteristicNotFound("motor")
             }
             return characteristic
         case .lamp:
             guard let characteristic = cube.lampCharacteristic else {
-                throw ToioBridgeError.characteristicNotFound("lamp")
+                throw CubeBridgeError.characteristicNotFound("lamp")
             }
             return characteristic
         case .sound:
             guard let characteristic = cube.soundCharacteristic else {
-                throw ToioBridgeError.characteristicNotFound("sound")
+                throw CubeBridgeError.characteristicNotFound("sound")
             }
             return characteristic
         }

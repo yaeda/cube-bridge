@@ -38,7 +38,7 @@ jobs:
       id-token: write
       pages: write
     env:
-      APP_NAME: ToioBridge
+      APP_NAME: CubeBridge
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
@@ -108,8 +108,8 @@ jobs:
         run: |
           archive_path="$RUNNER_TEMP/$APP_NAME.xcarchive"
           xcodebuild archive \
-            -project ToioBridge.xcodeproj \
-            -scheme ToioBridge \
+            -project CubeBridge.xcodeproj \
+            -scheme CubeBridge \
             -configuration Release \
             -destination 'generic/platform=macOS' \
             -derivedDataPath "$RUNNER_TEMP/DerivedData" \

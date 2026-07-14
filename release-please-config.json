@@ -7,14 +7,14 @@
   "pull-request-title-pattern": "chore: release ${version}",
   "packages": {
     ".": {
-      "package-name": "ToioBridge",
+      "package-name": "CubeBridge",
       "release-type": "simple",
       "initial-version": "1.0.0",
-      "pull-request-footer": "## Release checklist\n\n- [ ] Wiki release notes をユーザー向けに書く（英語）\n- [ ] Wiki release notes をユーザー向けに書く（日本語）\n- [ ] raw Wiki URL を確認する\n  - URL for en: https://raw.githubusercontent.com/wiki/yaeda/toio-bridge/Release-Notes-en.md\n  - URL for jp: https://raw.githubusercontent.com/wiki/yaeda/toio-bridge/Release-Notes-ja.md\n",
+      "pull-request-footer": "## Release checklist\n\n- [ ] Wiki release notes をユーザー向けに書く（英語）\n- [ ] Wiki release notes をユーザー向けに書く（日本語）\n- [ ] raw Wiki URL を確認する\n  - URL for en: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-en.md\n  - URL for jp: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-ja.md\n",
       "extra-files": [
         {
           "type": "generic",
-          "path": "ToioBridge.xcodeproj/project.pbxproj"
+          "path": "CubeBridge.xcodeproj/project.pbxproj"
         }
       ]
     }

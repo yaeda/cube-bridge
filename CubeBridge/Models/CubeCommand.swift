@@ -37,7 +37,7 @@ struct CubeCommand: Equatable {
 
     static func setLamp(red: Int, green: Int, blue: Int, durationMs: Int) throws -> CubeCommand {
         guard (0...255).contains(red), (0...255).contains(green), (0...255).contains(blue) else {
-            throw ToioBridgeError.invalidRGB(red: red, green: green, blue: blue)
+            throw CubeBridgeError.invalidRGB(red: red, green: green, blue: blue)
         }
 
         let duration = try durationUnit(from: durationMs)
@@ -53,10 +53,10 @@ struct CubeCommand: Equatable {
 
     static func playSoundEffect(id: Int, volume: Int = 255) throws -> CubeCommand {
         guard (0...10).contains(id) else {
-            throw ToioBridgeError.invalidSoundEffect(id)
+            throw CubeBridgeError.invalidSoundEffect(id)
         }
         guard (0...255).contains(volume) else {
-            throw ToioBridgeError.invalidRGB(red: volume, green: volume, blue: volume)
+            throw CubeBridgeError.invalidRGB(red: volume, green: volume, blue: volume)
         }
 
         return CubeCommand(target: .sound, data: Data([0x02, UInt8(id), UInt8(volume)]))
@@ -68,13 +68,13 @@ struct CubeCommand: Equatable {
 
     private static func validateSpeed(_ speed: Int) throws {
         guard (-100...100).contains(speed) else {
-            throw ToioBridgeError.invalidSpeed(speed)
+            throw CubeBridgeError.invalidSpeed(speed)
         }
     }
 
     private static func durationUnit(from durationMs: Int) throws -> UInt8 {
         guard (0...2550).contains(durationMs) else {
-            throw ToioBridgeError.invalidDuration(durationMs)
+            throw CubeBridgeError.invalidDuration(durationMs)
         }
         guard durationMs > 0 else {
             return 0
