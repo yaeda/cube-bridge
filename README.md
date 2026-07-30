@@ -67,19 +67,35 @@ Release, generates a Sparkle appcast at
 `https://yaeda.github.io/cube-bridge/appcast.xml`, and publishes the release
 after the appcast is deployed.
 
-The app uses Sparkle 2 for update checks. Release notes are served from the
-repository GitHub Wiki as raw Markdown and linked from the Sparkle appcast.
-Write release notes manually for users rather than copying `CHANGELOG.md`
-verbatim. Include the target version and older release sections so users who
-skip versions can still review intervening changes. Sparkle receives the full
-Markdown notes, and CubeBridge trims the displayed notes to versions newer than
-the user's installed bundle version:
+The app uses Sparkle 2 for update checks. Release notes are maintained manually
+in four repository GitHub Wiki pages:
 
-- `Release-Notes-en.md`
-- `Release-Notes-ja.md`
+- `Release-Notes-Latest-en` contains only the latest English release.
+- `Release-Notes-Latest-ja` contains only the latest Japanese release.
+- `Release-Notes-Full-en` contains the complete English release history, newest
+  first.
+- `Release-Notes-Full-ja` contains the complete Japanese release history,
+  newest first.
 
-Write the English Wiki page, translate and edit the Japanese Wiki page, and
-verify both raw Wiki URLs before merging the Release Please PR.
+The appcast passes the two Latest pages to Sparkle as raw Markdown. CubeBridge
+uses Sparkle's standard update UI and does not parse, trim, or otherwise modify
+the release-note body. Each Latest page must end with a Markdown link to the
+rendered Full page in the same language:
+
+- English: `https://github.com/yaeda/cube-bridge/wiki/Release-Notes-Full-en`
+- Japanese: `https://github.com/yaeda/cube-bridge/wiki/Release-Notes-Full-ja`
+
+Sparkle supports one full-release-notes URL, so the appcast points it to the
+rendered Wiki Home at `https://github.com/yaeda/cube-bridge/wiki`. Configure
+Wiki Home once as a language selector linking to both rendered Full pages.
+
+Before merging a Release Please PR, replace both Latest pages with the single
+new release and prepend that release to both Full pages. Write the English
+release notes for users, then translate and edit the Japanese version rather
+than copying `CHANGELOG.md` verbatim. The first Markdown heading in each Latest
+page and the corresponding Full page must include the target version. The
+release workflow verifies all four raw pages, Wiki Home, target versions, and
+Latest-to-Full links before building the signed app.
 
 Configure these repository secrets before merging the first release PR:
 

@@ -38,8 +38,15 @@ def find_update_item(root: ET.Element, version: str) -> ET.Element:
     raise SystemExit(f"appcast.xml has no item for version {version}")
 
 
-def raw_wiki_url(repository: str, language: str) -> str:
-    return f"https://raw.githubusercontent.com/wiki/{repository}/Release-Notes-{language}.md"
+def raw_latest_wiki_url(repository: str, language: str) -> str:
+    return (
+        f"https://raw.githubusercontent.com/wiki/{repository}/"
+        f"Release-Notes-Latest-{language}.md"
+    )
+
+
+def rendered_wiki_home_url(repository: str) -> str:
+    return f"https://github.com/{repository}/wiki"
 
 
 def patch_item(item: ET.Element, args: argparse.Namespace) -> None:
@@ -61,10 +68,17 @@ def patch_item(item: ET.Element, args: argparse.Namespace) -> None:
     for existing in list(item.findall(release_notes_tag)):
         item.remove(existing)
 
+    full_release_notes_tag = f"{{{SPARKLE_NS}}}fullReleaseNotesLink"
+    for existing in list(item.findall(full_release_notes_tag)):
+        item.remove(existing)
+
     for language in ("en", "ja"):
         link = ET.SubElement(item, release_notes_tag)
         link.set("{http://www.w3.org/XML/1998/namespace}lang", language)
-        link.text = raw_wiki_url(args.repository, language)
+        link.text = raw_latest_wiki_url(args.repository, language)
+
+    full_link = ET.SubElement(item, full_release_notes_tag)
+    full_link.text = rendered_wiki_home_url(args.repository)
 
 
 def main() -> None:
