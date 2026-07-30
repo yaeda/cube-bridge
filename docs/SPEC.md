@@ -33,12 +33,17 @@ The app bundle identifier is `io.github.yaeda.CubeBridge`.
 - The app checks for updates with Sparkle 2 using the appcast at `https://yaeda.github.io/cube-bridge/appcast.xml`.
 - Sparkle update archives are full signed and notarized `.dmg` files hosted as GitHub Release assets.
 - The Sparkle appcast is hosted on GitHub Pages and points each update enclosure at the matching GitHub Release `.dmg`.
-- Sparkle release notes are raw Markdown files hosted from the repository GitHub Wiki.
-- Each appcast item links English and Japanese release notes with `sparkle:releaseNotesLink` and `xml:lang`.
-- CubeBridge adapts full Markdown release notes through Sparkle's standard user driver delegate so the update UI only shows sections newer than the installed bundle version.
-- Release Please PRs include a checklist requiring maintainers to manually write the English Wiki release notes, translate and edit the Japanese Wiki release notes, and verify both raw Wiki URLs before merge.
-- Wiki release notes should be written for users rather than copied directly from `CHANGELOG.md`; each fixed-language page should contain the full release history so multi-version upgrades can be filtered locally.
-- The release workflow verifies the English and Japanese raw Wiki release-note URLs before deploying the appcast and publishing the GitHub Release.
+- Sparkle release notes are raw Markdown files hosted in the repository GitHub Wiki.
+- The Wiki release-note page names are `Release-Notes-Latest-en`, `Release-Notes-Latest-ja`, `Release-Notes-Full-en`, and `Release-Notes-Full-ja`.
+- Each Latest page contains one release only. Its first Markdown heading includes the release version, and its final link opens the rendered Full page in the same language.
+- Each Full page keeps the complete release history with the newest version first.
+- Each appcast item links the English and Japanese raw Latest pages with `sparkle:releaseNotesLink` and `xml:lang`.
+- Each appcast item has one `sparkle:fullReleaseNotesLink` pointing to the rendered Wiki Home, which serves as a language selector linking to both rendered Full pages.
+- Existing `sparkle:releaseNotesLink` and `sparkle:fullReleaseNotesLink` elements are replaced when patching an appcast item so links are not duplicated.
+- CubeBridge uses Sparkle's standard update UI and does not parse, trim, or otherwise modify release-note Markdown.
+- Release Please PRs include a checklist requiring maintainers to update both Latest and both Full Wiki pages and verify their links before merge.
+- Wiki release notes are written manually for users rather than copied directly from `CHANGELOG.md`; generation and translation are not automated.
+- Before building a signed release, the release workflow verifies that all four raw Wiki pages and rendered Wiki Home are available, each Latest first heading and Full page include the target version, and each Latest page links to its same-language Full page.
 
 ## Signing Configuration
 

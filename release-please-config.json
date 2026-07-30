@@ -10,7 +10,7 @@
       "package-name": "CubeBridge",
       "release-type": "simple",
       "initial-version": "1.0.0",
-      "pull-request-footer": "## Release checklist\n\n- [ ] Wiki release notes をユーザー向けに書く（英語）\n- [ ] Wiki release notes をユーザー向けに書く（日本語）\n- [ ] raw Wiki URL を確認する\n  - URL for en: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-en.md\n  - URL for jp: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-ja.md\n",
+      "pull-request-footer": "## Release checklist\n\n- [ ] `Release-Notes-Latest-en` を今回のリリース1件だけに更新する\n- [ ] `Release-Notes-Latest-ja` を今回のリリース1件だけに更新する\n- [ ] Latestの日英ページ末尾から、同言語のFullページへリンクする\n- [ ] `Release-Notes-Full-en` の先頭に今回のリリースを追加する\n- [ ] `Release-Notes-Full-ja` の先頭に今回のリリースを追加する\n- [ ] Latestの先頭見出しとFull本文に今回のバージョンが含まれることを確認する\n- [ ] 日英Latest／Fullのraw URLとWiki Homeを確認する\n  - Latest en: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-Latest-en.md\n  - Latest ja: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-Latest-ja.md\n  - Full en: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-Full-en.md\n  - Full ja: https://raw.githubusercontent.com/wiki/yaeda/cube-bridge/Release-Notes-Full-ja.md\n  - Wiki Home: https://github.com/yaeda/cube-bridge/wiki\n",
       "extra-files": [
         {
           "type": "generic",

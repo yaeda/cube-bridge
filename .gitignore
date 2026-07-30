@@ -7,6 +7,10 @@ xcuserdata/
 DerivedData/
 build/
 
+# Python test caches
+__pycache__/
+*.py[cod]
+
 # Local signing configuration and secrets
 Config/Signing.local.xcconfig
 *.p12

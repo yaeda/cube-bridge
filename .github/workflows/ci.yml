@@ -18,6 +18,9 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Run Python tests
+        run: python3 -m unittest discover -s scripts/tests -v
+
       - name: Install tools
         run: brew install swiftlint
 

@@ -60,6 +60,12 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Verify Wiki release notes
+        run: |
+          python3 scripts/validate_wiki_release_notes.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --version "$VERSION"
+
       - name: Validate release secrets
         run: |
           missing=0
@@ -176,13 +182,6 @@ jobs:
 
       - name: Upload release asset
         run: gh release upload "$TAG_NAME" "$RUNNER_TEMP/$APP_NAME-$TAG_NAME.dmg" --clobber
-
-      - name: Verify Wiki release notes
-        run: |
-          for lang in en ja; do
-            url="https://raw.githubusercontent.com/wiki/$GITHUB_REPOSITORY/Release-Notes-$lang.md"
-            curl --fail --silent --show-error --location "$url" > /dev/null
-          done
 
       - name: Generate Sparkle appcast
         run: |
